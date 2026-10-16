@@ -1,7 +1,7 @@
 __pycache__/
 .pytest_cache/
 .venv/
-.env
+.env*
 *.py[cod]
 instance/
 *.sqlite3
