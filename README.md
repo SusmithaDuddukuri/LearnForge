@@ -252,3 +252,8 @@ Document how learners can interpret their recorded course progress.
 
 Explain the intended quiz attempt and result review workflow.
 
+
+## Data Persistence
+
+Document which prototype data is stored and how local persistence works.
+
