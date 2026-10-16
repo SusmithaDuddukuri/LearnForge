@@ -267,3 +267,8 @@ Describe environment configuration and safe handling of secrets.
 
 Document useful error messages and recovery guidance for common failures.
 
+
+## Maintenance Practices
+
+Describe maintainable code, focused changes, and review expectations.
+
