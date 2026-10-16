@@ -342,3 +342,8 @@ Document practices for keeping course descriptions and lesson materials accurate
 
 Describe expectations for clear explanations, relevant examples, and useful practice material.
 
+
+## Navigation Consistency
+
+Explain why navigation controls should behave consistently across the learning experience.
+
