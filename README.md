@@ -202,3 +202,8 @@ Document the expected structure of lesson explanations and practice material.
 
 Describe the intended workflow for marking lessons complete.
 
+
+## Accessibility
+
+Describe keyboard access, readable text, and clear navigation expectations.
+
