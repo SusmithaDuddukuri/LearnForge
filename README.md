@@ -232,3 +232,8 @@ Describe how faculty review course activity in the prototype.
 
 Document the distinction between student and faculty workspaces and the limits of prototype authentication.
 
+
+## Study Sessions
+
+Explain how study sessions support learner planning and activity tracking.
+
