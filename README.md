@@ -172,3 +172,8 @@ Describe profile settings and workspace preferences.
 
 Explain how learners organize and track study tasks.
 
+
+## Local Development
+
+Provide guidance for setting up and running the project locally.
+
