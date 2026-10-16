@@ -372,3 +372,8 @@ Describe how local database files should be managed during development and testi
 
 Provide a starting point for diagnosing dependency, startup, and navigation problems.
 
+
+## Code Review Expectations
+
+Describe how reviewers can check correctness, readability, security, and maintainability.
+
