@@ -182,3 +182,8 @@ Provide guidance for setting up and running the project locally.
 
 Describe the checks maintainers should perform before merging changes.
 
+
+## Course Prerequisites
+
+Document how learners should check required knowledge before starting a course.
+
