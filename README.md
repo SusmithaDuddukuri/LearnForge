@@ -332,3 +332,8 @@ Describe the information faculty should review when monitoring course activity.
 
 Explain how learners should seek help when course material or navigation is unclear.
 
+
+## Course Maintenance
+
+Document practices for keeping course descriptions and lesson materials accurate.
+
