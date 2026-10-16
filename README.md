@@ -302,3 +302,8 @@ Explain how practice activities help learners apply lesson concepts.
 
 Describe how bookmarks can help learners return to useful course material.
 
+
+## Personal Study Routine
+
+Provide guidance for building a consistent study routine around available learning time.
+
