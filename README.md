@@ -125,3 +125,10 @@ Then visit `http://127.0.0.1:8000`.
 - Student workspace is the default. The faculty workspace requires the faculty access password before the server session is switched to faculty.
 - Demo faculty password: `faculty-demo-2026` (set `LEARNFORGE_FACULTY_PASSWORD` to change it). This demo gate is for local prototype testing, not a replacement for individual authenticated accounts in production.
 - Lessons open in a full-screen reading layout. Use **Back to course** to return to the course outline, or mark a lesson complete to save progress and move to the next lesson.
+
+## Learning Experience
+
+LearnForge provides a focused learning workflow with course outlines, lesson content, progress tracking, and clear navigation back to the course outline.
+
+Students can follow lesson content and track completion. Faculty tools are intended to remain separate from student-facing dashboards.
+
