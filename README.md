@@ -177,3 +177,8 @@ Explain how learners organize and track study tasks.
 
 Provide guidance for setting up and running the project locally.
 
+
+## Testing Guidance
+
+Describe the checks maintainers should perform before merging changes.
+
