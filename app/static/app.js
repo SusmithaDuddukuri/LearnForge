@@ -1,71 +1,548 @@
 const $ = (s, root=document) => root.querySelector(s);
 const $$ = (s, root=document) => [...root.querySelectorAll(s)];
 let courses = [], quizItems = [], quizIndex = 0, quizAnswers = {}, quizChecked = false;
+let bookmarkedIds = new Set();
+let topRatedOnly = false;
+let timerInterval = null, timerSeconds = 25 * 60, timerRunning = false;
+
 const courseIcons = {
-  Development:'<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="24" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m12 12-4 4 4 4m8-8 4 4-4 4m-3-9-2 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  Data:'<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 26V6m0 20h23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="9" y="16" width="4" height="7" rx="1" fill="currentColor"/><rect x="16" y="11" width="4" height="12" rx="1" fill="currentColor"/><rect x="23" y="7" width="4" height="16" rx="1" fill="currentColor"/></svg>',
-  Design:'<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="22" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M8 23l6-6 4 4 3-3 3 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  Technology:'<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="7" width="22" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 27h8m-4-5v5m-5-14 3 3-3 3m6 0h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  Development: "</>",
+  Data: "◒",
+  Design: "✳",
+  Technology: "⌘",
+  "Artificial Intelligence": "🤖",
+  Cybersecurity: "🛡️"
 };
+
 const initials = name => name.split(" ").map(part=>part[0]).slice(0,2).join("");
-function toast(message){const el=$("#toast");el.textContent=message;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2600)}
-async function api(url, options={}){const response=await fetch(url,{headers:{"Content-Type":"application/json"},...options});const data=await response.json();if(!response.ok)throw new Error(data.error||"Something went wrong");return data}
-function goTo(page){const target=$("#page-"+page);if(!target)return;if(page==="faculty-dashboard"&&localStorage.getItem("learnforge-role")!=="faculty"){toast("Faculty workspace requires faculty access.");page="dashboard";return goTo(page)}$$(".page").forEach(p=>p.classList.remove("active-page"));target.classList.add("active-page");$$(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.page===page));const label=({dashboard:"Student overview","faculty-dashboard":"Faculty dashboard",catalog:"Explore courses","my-learning":"My learning",practice:"Quick practice",achievements:"Achievements",schedule:"Study planner"})[page]||"Overview";$("#crumbCurrent").textContent=label;$("#sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"});if(page==="catalog")renderCatalog();if(page==="my-learning")renderMyLearning();if(page==="practice")loadQuiz();if(page==="faculty-dashboard")loadFacultyDashboard()}
-function artClass(c){return ["violet","blue","orange","green"][(c.id-1)%4]}
-function courseCard(c){return `<article class="course-card"><div class="course-art ${artClass(c)}"><span class="art-tag">${c.level.toUpperCase()}</span><span class="art-glyph">${courseIcons[c.category]||""}</span></div><div class="course-body"><div class="course-meta"><span class="course-category">${c.category}</span><span class="course-rating">★ ${c.rating.toFixed(1)}</span></div><h3>${c.title}</h3><p class="course-desc">${c.description}</p><div class="course-instructor"><span class="instructor-avatar">${initials(c.instructor)}</span><span>${c.instructor}</span></div><div class="course-card-bottom"><span class="course-duration">◷ ${c.duration} · ${c.lessons} lessons</span><button class="course-action" data-course="${c.id}">${c.progress>0?"Continue":"View course"} →</button></div></div></article>`}
-function renderProgress(c){return `<div class="progress-course"><div class="course-mini-icon ${artClass(c)}">${courseIcons[c.category]||""}</div><div class="progress-info"><strong>${c.title}</strong><small>${c.progress>=100?"Course completed":`${c.progress}% complete`} · ${c.lessons} lessons</small><div class="progress-track"><span style="width:${c.progress}%"></span></div></div><span class="progress-percent">${c.progress}%</span></div>`}
-async function loadDashboard(){try{const data=await api("/api/dashboard");$("#statEnrolled").textContent=data.stats.enrolled;$("#statCompleted").textContent=data.stats.completed;$("#statHours").textContent=data.stats.learning_hours;$("#progressCourses").innerHTML=data.courses.length?data.courses.map(renderProgress).join(""):'<p class="subheading">No courses started yet. Explore the catalog to begin.</p>';}catch(e){$("#progressCourses").innerHTML='<p class="subheading">Dashboard data is unavailable. Please refresh.</p>'}try{courses=(await api("/api/courses")).items;$("#recommendedCourses").innerHTML=courses.filter(c=>c.progress===0||c.progress<50).slice(0,3).map(courseCard).join("");}catch(e){$("#recommendedCourses").innerHTML='<p>Courses could not be loaded.</p>'}}
-async function renderCatalog(){try{const params=new URLSearchParams({q:$("#courseSearch").value,category:$("#categoryFilter").value,level:$("#levelFilter").value});const data=await api("/api/courses?"+params);$("#catalogCourses").innerHTML=data.items.map(courseCard).join("");$("#catalogCount").textContent=`${data.total} course${data.total===1?"":"s"}`;$("#emptyCourses").classList.toggle("hidden",data.total!==0)}catch(e){toast("Couldn't load the course catalog.")}}
-async function renderMyLearning(){try{const data=await api("/api/courses");const enrolled=data.items.filter(c=>c.progress>0);$("#learningSummary").innerHTML=`<div class="learning-stat"><strong>${enrolled.length}</strong><span>Courses in progress</span></div><div class="learning-stat"><strong>${enrolled.filter(c=>c.progress===100).length}</strong><span>Courses completed</span></div><div class="learning-stat"><strong>${enrolled.reduce((sum,c)=>sum+c.progress,0)}%</strong><span>Combined progress points</span></div>`;$("#myCourses").innerHTML=(enrolled.length?enrolled:data.items).map(courseCard).join("")}catch(e){toast("Couldn't load your learning.")}}
-function openCourse(id){const c=courses.find(x=>x.id===Number(id));if(!c){api(`/api/courses/${id}`).then(showCourse).catch(()=>toast("Course not found"));return}showCourse(c)}
+
+function toast(message){
+  const el = $("#toast");
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove("show"), 2800);
+}
+
+async function api(url, options={}){
+  const response = await fetch(url, {headers: {"Content-Type": "application/json"}, ...options});
+  const data = await response.json();
+  if(!response.ok) throw new Error(data.error || "Something went wrong");
+  return data;
+}
+
+function goTo(page){
+  const target = $("#page-" + page);
+  if(!target) return;
+  $$(".page").forEach(p => p.classList.remove("active-page"));
+  target.classList.add("active-page");
+  $$(".nav-item").forEach(b => b.classList.toggle("active", b.dataset.page === page));
+  const label = ({
+    dashboard: "Overview",
+    catalog: "Explore courses",
+    "my-learning": "My learning",
+    practice: "Quick practice",
+    achievements: "Achievements",
+    schedule: "Study planner"
+  })[page] || "Overview";
+  $("#crumbCurrent").textContent = label;
+  $("#sidebar").classList.remove("open");
+  window.scrollTo({top: 0, behavior: "smooth"});
+  if(page === "catalog") renderCatalog();
+  if(page === "my-learning") renderMyLearning();
+  if(page === "practice") loadQuiz();
+}
+
+function artClass(c){
+  if(c.color) return c.color;
+  return ["violet", "blue", "orange", "green"][(c.id - 1) % 4];
+}
+
+function courseCard(c){
+  const isSaved = bookmarkedIds.has(c.id);
+  return `<article class="course-card">
+    <div class="course-art ${artClass(c)}">
+      <span class="art-tag">${c.level.toUpperCase()}</span>
+      <div class="card-header-actions">
+        <button class="card-btn-icon bookmark-btn ${isSaved ? 'saved' : ''}" data-bookmark="${c.id}" title="${isSaved ? 'Remove bookmark' : 'Save course'}">${isSaved ? '★' : '☆'}</button>
+      </div>
+      <span class="art-glyph">${courseIcons[c.category] || "✦"}</span>
+    </div>
+    <div class="course-body">
+      <div class="course-meta">
+        <span class="course-category">${c.category}</span>
+        <span class="course-rating">★ ${c.rating.toFixed(2)}</span>
+      </div>
+      <h3>${c.title}</h3>
+      <p class="course-desc">${c.description}</p>
+      <div class="course-instructor">
+        <span class="instructor-avatar">${initials(c.instructor)}</span>
+        <span>${c.instructor}</span>
+      </div>
+      <div class="course-card-bottom">
+        <span class="course-duration">◷ ${c.duration} · ${c.lessons} lessons</span>
+        <button class="course-action" data-course="${c.id}">${c.progress > 0 ? "Continue" : "View course"} →</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderProgress(c){
+  return `<div class="progress-course">
+    <div class="course-mini-icon ${artClass(c)}">${courseIcons[c.category] || "✦"}</div>
+    <div class="progress-info">
+      <strong>${c.title}</strong>
+      <small>${c.progress >= 100 ? "Course completed" : `${c.progress}% complete`} · ${c.lessons} lessons</small>
+      <div class="progress-track"><span style="width:${c.progress}%"></span></div>
+    </div>
+    <span class="progress-percent">${c.progress}%</span>
+  </div>`;
+}
+
+async function syncBookmarks(){
+  try {
+    const res = await api("/api/bookmarks");
+    bookmarkedIds = new Set((res.items || []).map(c => c.id));
+  } catch(e) {
+    // fallback
+  }
+}
+
+async function toggleBookmark(courseId){
+  const id = Number(courseId);
+  const willSave = !bookmarkedIds.has(id);
+  try {
+    await api(`/api/bookmarks/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({saved: willSave})
+    });
+    if(willSave) bookmarkedIds.add(id);
+    else bookmarkedIds.delete(id);
+    toast(willSave ? "Course saved to bookmarks!" : "Bookmark removed.");
+    $$(`[data-bookmark="${id}"]`).forEach(btn => {
+      btn.classList.toggle("saved", willSave);
+      btn.textContent = willSave ? "★" : "☆";
+      btn.title = willSave ? "Remove bookmark" : "Save course";
+    });
+  } catch(e) {
+    toast(e.message);
+  }
+}
+
+async function loadDashboard(){
+  await syncBookmarks();
+  try {
+    const data = await api("/api/dashboard");
+    $("#statEnrolled").textContent = data.stats.enrolled;
+    $("#statCompleted").textContent = data.stats.completed;
+    $("#statHours").textContent = data.stats.learning_hours;
+    $("#progressCourses").innerHTML = data.courses.length
+      ? data.courses.map(renderProgress).join("")
+      : '<p class="subheading">No courses started yet. Explore the catalog to begin.</p>';
+  } catch(e) {
+    $("#progressCourses").innerHTML = '<p class="subheading">Dashboard data is unavailable. Please refresh.</p>';
+  }
+  try {
+    courses = (await api("/api/courses")).items;
+    $("#recommendedCourses").innerHTML = courses
+      .filter(c => c.progress === 0 || c.progress < 50)
+      .slice(0, 3)
+      .map(courseCard)
+      .join("");
+  } catch(e) {
+    $("#recommendedCourses").innerHTML = '<p>Courses could not be loaded.</p>';
+  }
+}
+
+async function renderCatalog(){
+  try {
+    const params = new URLSearchParams({
+      q: $("#courseSearch").value,
+      category: $("#categoryFilter").value,
+      level: $("#levelFilter").value
+    });
+    const data = await api("/api/courses?" + params);
+    let items = data.items;
+    if(topRatedOnly){
+      items = items.filter(c => c.rating >= 4.9);
+    }
+    $("#catalogCourses").innerHTML = items.map(courseCard).join("");
+    $("#catalogCount").textContent = `${items.length} course${items.length === 1 ? "" : "s"}`;
+    $("#emptyCourses").classList.toggle("hidden", items.length !== 0);
+
+    const currentCat = $("#categoryFilter").value;
+    $$(".topic-pill").forEach(pill => {
+      pill.classList.toggle("active", pill.dataset.category === currentCat);
+    });
+  } catch(e) {
+    toast("Couldn't load the course catalog.");
+  }
+}
+
+async function renderMyLearning(){
+  try {
+    const data = await api("/api/courses");
+    const enrolled = data.items.filter(c => c.progress > 0);
+    $("#learningSummary").innerHTML = `
+      <div class="learning-stat"><strong>${enrolled.length}</strong><span>Courses in progress</span></div>
+      <div class="learning-stat"><strong>${enrolled.filter(c => c.progress === 100).length}</strong><span>Courses completed</span></div>
+      <div class="learning-stat"><strong>${enrolled.reduce((sum, c) => sum + c.progress, 0)}%</strong><span>Combined progress points</span></div>
+    `;
+    $("#myCourses").innerHTML = (enrolled.length ? enrolled : data.items).map(courseCard).join("");
+  } catch(e) {
+    toast("Couldn't load your learning.");
+  }
+}
+
+function openCourse(id){
+  const c = courses.find(x => x.id === Number(id));
+  if(!c){
+    api(`/api/courses/${id}`).then(showCourse).catch(() => toast("Course not found"));
+    return;
+  }
+  showCourse(c);
+}
+
 function showCourse(c){
-  const modules = c.modules || [];
-  const bookmarked = false;
-  $("#modalBody").innerHTML = `<div class="eyebrow">${c.category.toUpperCase()} · ${c.level.toUpperCase()}</div><h2 id="modalTitle">${c.title}</h2><p>${c.description}</p><div class="detail-meta"><span>★ ${c.rating} rating</span><span>◷ ${c.duration}</span><span>${c.lessons} lessons</span><span>By ${c.instructor}</span></div><h3 class="lesson-section-title">What you'll learn</h3><div class="skill-chips">${c.skills.map(skill=>`<span>${skill}</span>`).join("")}</div><h3 class="lesson-section-title">Course lessons</h3><div class="module-list">${modules.map((m,i)=>`<button class="module-row module-open" data-module="${m.id}" data-course-id="${c.id}" type="button"><span class="module-num">${String(i+1).padStart(2,"0")}</span><span class="module-row-text"><strong>${m.title}</strong><small>${m.duration}</small></span><span class="module-arrow" aria-hidden="true">›</span></button>`).join("")}</div><div class="modal-actions"><button class="outline-btn" id="modalCloseSecondary" type="button">Close</button><button class="primary-btn" id="startCourseBtn" type="button">${c.progress>0?"Continue course":"Start learning"} →</button></div>`;
+  const isSaved = bookmarkedIds.has(c.id);
+  $("#modalBody").innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div class="eyebrow">${c.category.toUpperCase()} · ${c.level.toUpperCase()}</div>
+      <button class="card-btn-icon bookmark-btn ${isSaved ? 'saved' : ''}" id="modalBookmarkBtn" title="Bookmark">${isSaved ? '★' : '☆'}</button>
+    </div>
+    <h2 id="modalTitle">${c.title}</h2>
+    <p>${c.description}</p>
+    <div class="detail-meta">
+      <span>★ ${c.rating} rating</span>
+      <span>◷ ${c.duration}</span>
+      <span>${c.lessons} lessons</span>
+      <span>By ${c.instructor}</span>
+    </div>
+    <div style="display:flex;gap:8px;margin:12px 0 16px">
+      <button class="outline-btn" id="modalAiTipBtn" style="padding:6px 12px;font-size:10px">💡 Quick Study Tip</button>
+      <button class="outline-btn" id="modalCopyBtn" style="padding:6px 12px;font-size:10px">📋 Copy Syllabus</button>
+    </div>
+    <div id="modalTipContainer" class="hidden" style="background:#f7f4ff;border:1px solid #e1d8ff;border-radius:8px;padding:12px;font-size:11px;color:#524580;margin-bottom:14px"></div>
+    <h3 style="font:700 13px Manrope;margin:18px 0 10px">What you'll learn</h3>
+    <p>${c.skills.join(" · ")}</p>
+    <h3 style="font:700 13px Manrope;margin:18px 0 10px">Course outline</h3>
+    <div class="module-list">
+      ${c.modules.map((m, i) => `
+        <div class="module-row">
+          <span class="module-num">${String(i + 1).padStart(2, "0")}</span>
+          <div><strong>${m.title}</strong><small>${m.duration}</small></div>
+        </div>
+      `).join("")}
+    </div>
+    <div class="modal-actions">
+      <button class="outline-btn" id="modalCloseSecondary">Close</button>
+      <button class="primary-btn" id="startCourseBtn">${c.progress > 0 ? "Continue course" : "Start learning"} →</button>
+    </div>
+  `;
   $("#modalBackdrop").classList.remove("hidden");
-  $("#modalCloseSecondary").onclick=closeModal;
-  $("#startCourseBtn").onclick=()=>openLesson(c.id, modules[0]?.id);
-  $$(".module-open", $("#modalBody")).forEach(btn=>btn.addEventListener("click",()=>openLesson(btn.dataset.courseId,btn.dataset.module)));
+  $("#modalCloseSecondary").onclick = closeModal;
+  
+  $("#modalBookmarkBtn").onclick = () => {
+    toggleBookmark(c.id);
+    const updatedSaved = bookmarkedIds.has(c.id);
+    $("#modalBookmarkBtn").textContent = updatedSaved ? "★" : "☆";
+    $("#modalBookmarkBtn").classList.toggle("saved", updatedSaved);
+  };
+
+  $("#modalAiTipBtn").onclick = () => {
+    const tipBox = $("#modalTipContainer");
+    tipBox.classList.toggle("hidden");
+    tipBox.innerHTML = `<strong>💡 Pro Study Tip:</strong> Practice active recall by explaining each module concept to yourself in 2 sentences before taking the chapter quiz!`;
+  };
+
+  $("#modalCopyBtn").onclick = () => {
+    const text = `${c.title} (${c.category})\nModules:\n` + c.modules.map((m, i) => `${i+1}. ${m.title} (${m.duration})`).join("\n");
+    navigator.clipboard.writeText(text).then(() => {
+      toast("Syllabus copied to clipboard!");
+    }).catch(() => {
+      toast("Copied syllabus summary.");
+    });
+  };
+
+  $("#startCourseBtn").onclick = async () => {
+    try {
+      const next = Math.min(100, Math.max(c.progress, 15));
+      await api("/api/progress", {
+        method: "POST",
+        body: JSON.stringify({course_id: c.id, progress: next})
+      });
+      c.progress = next;
+      closeModal();
+      await loadDashboard();
+      toast(`${c.title} progress updated to ${next}%`);
+      goTo("my-learning");
+    } catch(e) {
+      toast(e.message);
+    }
+  };
 }
-async function openLesson(courseId,moduleId){
-  try{
-    const lesson=await api(`/api/courses/${courseId}/modules/${moduleId}`);
-    const c=courses.find(item=>item.id===Number(courseId));
-    const lessonIndex=(c?.modules||[]).findIndex(item=>item.id===Number(moduleId));
-    const nextModule=c?.modules?.[lessonIndex+1];
-    $("#modalBackdrop").classList.add("lesson-fullscreen");
-    $("#modalBody").innerHTML=`<div class="lesson-topline"><span class="lesson-brand-mark">L</span><span>LearnForge · Learning mode</span><button class="lesson-exit" id="lessonBackBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6M9 12h12"/></svg> Back to course</button></div><div class="lesson-reading"><div class="eyebrow">LESSON ${String(lessonIndex+1).padStart(2,"0")} · ${lesson.duration}</div><h2 id="modalTitle">${lesson.title}</h2><p class="lesson-course-name">${lesson.course_title}</p><div class="lesson-content"><p>${lesson.content}</p><h3>Key ideas</h3><ul>${lesson.key_points.map(point=>`<li>${point}</li>`).join("")}</ul><div class="practice-callout"><strong>Try it yourself</strong><p>${lesson.practice}</p></div></div><div class="lesson-bottom-actions"><button class="outline-btn" id="lessonBackBottom" type="button">Back to course outline</button><button class="primary-btn" id="completeLessonBtn" type="button">Mark lesson complete <span>✓</span></button></div></div>`;
-    /* old lesson markup replaced */
-    $("#lessonBackBtn").onclick=()=>{ $("#modalBackdrop").classList.remove("lesson-fullscreen"); showCourse(c); };
-    $("#lessonBackBottom").onclick=()=>{ $("#modalBackdrop").classList.remove("lesson-fullscreen"); showCourse(c); };
-    $("#completeLessonBtn").onclick=async()=>{
-      try{const result=await api(`/api/courses/${courseId}/modules/${moduleId}/complete`,{method:"POST",body:JSON.stringify({})});if(c)c.progress=result.progress;await loadDashboard();toast("Lesson marked complete. Your progress is saved.");if(nextModule)openLesson(courseId,nextModule.id);else{$("#modalBackdrop").classList.remove("lesson-fullscreen");showCourse(c);toast("Course lessons complete — well done!")}}
-      catch(error){toast(error.message||"Couldn't save lesson progress.")}
-    };
-  }catch(error){toast(error.message||"Lesson content couldn't be loaded.")}
+
+function closeModal(){
+  $("#modalBackdrop").classList.add("hidden");
 }
-function closeModal(){$("#modalBackdrop").classList.add("hidden");$("#modalBackdrop").classList.remove("lesson-fullscreen")}
-async function loadQuiz(){try{quizItems=await api("/api/quiz");quizIndex=0;quizAnswers={};quizChecked=false;$("#quizResult").classList.add("hidden");$("#quizForm").classList.remove("hidden");renderQuestion()}catch(e){toast("Practice questions couldn't be loaded.")}}
-function renderQuestion(){const q=quizItems[quizIndex];if(!q)return;$("#quizStep").textContent=`QUESTION ${quizIndex+1} OF ${quizItems.length}`;$("#quizPercent").textContent=`${Math.round(quizIndex/quizItems.length*100)}% complete`;$("#quizTrack").style.width=`${quizIndex/quizItems.length*100}%`;$("#quizBack").disabled=quizIndex===0;$("#quizNext").textContent=quizChecked?(quizIndex===quizItems.length-1?"See results →":"Next question →"):"Check answer →";$("#quizContent").innerHTML=`<h2 class="quiz-question">${q.question}</h2><div class="quiz-options">${q.options.map((option,i)=>`<label class="quiz-option ${quizAnswers[q.id]===i?"selected":""}"><span class="option-letter">${String.fromCharCode(65+i)}</span><span>${option}</span><input type="radio" name="quizAnswer" value="${i}" ${quizAnswers[q.id]===i?"checked":""} style="margin-left:auto;accent-color:#7358e8"></label>`).join("")}</div>${quizChecked?`<div class="quiz-feedback ${quizAnswers[q.id]===q.answer?"correct":"incorrect"}">${quizAnswers[q.id]===q.answer?"Correct! ":"Not quite. "}${q.explanation}</div>`:""}`;$$(".quiz-option",$("#quizContent")).forEach((label,i)=>label.addEventListener("click",()=>{if(quizChecked)return;quizAnswers[q.id]=i;renderQuestion()}))}
-async function submitQuiz(){try{const answers={};quizItems.forEach(q=>{if(quizAnswers[q.id]!==undefined)answers[q.id]=quizAnswers[q.id]});const result=await api("/api/quiz/submit",{method:"POST",body:JSON.stringify({answers})});$("#quizForm").classList.add("hidden");$("#quizResult").classList.remove("hidden");$("#quizResult").innerHTML=`<div class="score">${result.percent}%</div><h2>${result.percent===100?"Brilliant work!":result.percent>=60?"Nice progress!":"Keep practicing!"}</h2><p>You got ${result.score} out of ${result.total} correct. Every attempt helps the ideas stick.</p><button class="primary-btn" id="tryAgainBtn">Try again →</button>`;$("#quizResult").querySelector("button").onclick=loadQuiz;$("#quizTrack").style.width="100%";$("#quizPercent").textContent="100% complete"}catch(e){toast(e.message)}}
-$$("[data-page]").forEach(el=>el.addEventListener("click",()=>goTo(el.dataset.page)));
-document.addEventListener("click",e=>{const btn=e.target.closest("[data-course]");if(btn)openCourse(btn.dataset.course)});
-$("#courseSearch").addEventListener("input",()=>renderCatalog());$("#categoryFilter").addEventListener("change",renderCatalog);$("#levelFilter").addEventListener("change",renderCatalog);
-$("#clearFilters").addEventListener("click",()=>{$("#courseSearch").value="";$("#categoryFilter").value="All";$("#levelFilter").value="All";renderCatalog()});
-$("#searchFocus").addEventListener("click",()=>{goTo("catalog");setTimeout(()=>$("#courseSearch").focus(),100)});
-document.addEventListener("keydown",e=>{if(e.key==="/"&&!["INPUT","TEXTAREA"].includes(document.activeElement.tagName)){e.preventDefault();$("#searchFocus").click()}if(e.key==="Escape")closeModal()});
-$("#continueBtn").addEventListener("click",()=>openCourse(1));$("#modalClose").addEventListener("click",closeModal);$("#modalBackdrop").addEventListener("click",e=>{if(e.target===$("#modalBackdrop"))closeModal()});
-async function showNotifications(){try{const data=await api("/api/notifications");$("#modalBody").innerHTML=`<div class="eyebrow">YOUR UPDATES</div><h2 id="modalTitle">Notifications</h2><p>Recent activity from your learning space.</p><div class="notification-list">${data.items.map((item,i)=>`<article class="notification-row"><span class="notification-symbol">${item.kind==="calendar"?"<svg viewBox='0 0 24 24' aria-hidden='true'><rect x='4' y='5' width='16' height='15' rx='2'/><path d='M8 3v4m8-4v4M4 9h16'/></svg>":item.kind==="check"?"<svg viewBox='0 0 24 24' aria-hidden='true'><path d='M5 12l4 4L19 6'/></svg>":"<svg viewBox='0 0 24 24' aria-hidden='true'><path d='M5 4h10l4 4v12H5zM15 4v5h4M8 13h8M8 17h8'/></svg>"}</span><div><strong>${item.title}</strong><p>${item.message}</p></div></article>`).join("")}</div><div class="modal-actions"><button class="primary-btn" id="notificationsDone" type="button">Done</button></div>`;$("#modalBackdrop").classList.remove("hidden");$("#notificationsDone").onclick=closeModal;$("#notificationsBtn").classList.remove("has-unread")}catch(error){toast("Notifications couldn't be loaded.")}}
-function showProfile(){const role=localStorage.getItem("learnforge-role")||"student";const name=localStorage.getItem("learnforge-name")||"Alex Morgan";$("#modalBody").innerHTML=`<div class="eyebrow">YOUR ACCOUNT</div><h2 id="modalTitle">Profile & preferences</h2><div class="profile-card-large"><div class="avatar profile-large-avatar">${initials(name)}</div><div><strong>${name}</strong><p>${role==="faculty"?"Faculty workspace":"Student account"}</p></div></div><label class="profile-field">Display name<input id="profileNameInput" value="${name.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}" maxlength="60"></label><label class="profile-field">Email address<input value="alex.morgan@example.com" type="email" disabled></label><label class="profile-field">Workspace view<select id="profileRoleSelect"><option value="student" ${role==="student"?"selected":""}>Student</option><option value="faculty" ${role==="faculty"?"selected":""}>Faculty</option></select></label><div class="modal-actions"><button class="outline-btn" id="profileCancel" type="button">Cancel</button><button class="primary-btn" id="saveProfileBtn" type="button">Save preferences</button></div>`;$("#modalBackdrop").classList.remove("hidden");$("#profileCancel").onclick=closeModal;$("#saveProfileBtn").onclick=()=>{const name=$("#profileNameInput").value.trim()||"Alex Morgan";const newRole=$("#profileRoleSelect").value;localStorage.setItem("learnforge-name",name);$(".top-profile-name").textContent=name;$(".top-profile .avatar").textContent=initials(name);$(".profile .avatar").textContent=initials(name);$(".profile strong").textContent=name;if(newRole!==role){closeModal();if(newRole==="faculty"){const password=prompt("Faculty access password:");if(password===null)return;applyRole("faculty",password)}else applyRole("student");}else{closeModal();toast("Profile preferences saved.")}}}
-async function applyRole(role,password){try{const result=await api("/api/session/role",{method:"POST",body:JSON.stringify({role,password})});localStorage.setItem("learnforge-role",result.role);const faculty=result.role==="faculty";$("#roleSwitch").textContent=faculty?"Faculty workspace":"Student workspace";$("#roleSwitch").setAttribute("aria-pressed",String(faculty));$$("[data-page=\"faculty-dashboard\"]").forEach(el=>el.hidden=!faculty);goTo(faculty?"faculty-dashboard":"dashboard");}catch(error){toast(error.message||"Workspace access denied.")}}
-async function loadFacultyDashboard(){try{const [courseData,dashboardData]=await Promise.all([api("/api/faculty/dashboard"),api("/api/dashboard")]);$("#facultyCourseCount").textContent=courseData.courses;$("#facultyActiveCount").textContent=dashboardData.stats.enrolled;$("#facultyQuizCount").textContent=dashboardData.quiz_attempts;$("#facultyCourseTable").innerHTML=courseData.items.map(c=>`<article class="faculty-course-row"><div class="faculty-course-icon ${artClass(c)}">${courseIcons[c.category]||""}</div><div class="faculty-course-main"><strong>${c.title}</strong><small>${c.category} · ${c.level} · ${c.lessons} lessons</small><div class="progress-track"><span style="width:${c.progress}%"></span></div></div><span class="faculty-progress-label">${c.progress}%</span><button class="outline-btn faculty-open-course" data-course="${c.id}" type="button">Review</button></article>`).join("");}catch(error){$("#facultyCourseTable").textContent="Course activity is temporarily unavailable."}}
-$("#notificationsBtn").addEventListener("click",showNotifications);$("#profileBtn").addEventListener("click",showProfile);$("#topProfileBtn").addEventListener("click",showProfile);$("#roleSwitch").addEventListener("click",()=>{if((localStorage.getItem("learnforge-role")||"student")==="student"){const password=prompt("Faculty access password:");if(password!==null)applyRole("faculty",password)}else applyRole("student")});$("#facultyRefreshBtn").addEventListener("click",loadFacultyDashboard);$("#aboutLink").addEventListener("click",e=>{e.preventDefault();$("#modalBody").innerHTML='<h2 id="modalTitle">About LearnForge</h2><p>LearnForge is a learning platform prototype designed to make practical, self-paced education feel clear and motivating.</p><p>Course progress, study sessions, quiz attempts, bookmarks, and notes are stored in a local SQLite database. This prototype does not provide secure user accounts or production-grade access control.</p><button class="primary-btn" id="aboutClose">Sounds good</button>';$("#modalBackdrop").classList.remove("hidden");$("#aboutClose").onclick=closeModal});
-$("#menuBtn").addEventListener("click",()=>$("#sidebar").classList.toggle("open"));
-$("#quizNext").addEventListener("click",()=>{const q=quizItems[quizIndex];if(!quizChecked){if(quizAnswers[q.id]===undefined){toast("Choose an answer first.");return}quizChecked=true;renderQuestion();return}if(quizIndex<quizItems.length-1){quizIndex++;quizChecked=false;renderQuestion()}else submitQuiz()});
-$("#quizBack").addEventListener("click",()=>{if(quizIndex>0){quizIndex--;quizChecked=false;renderQuestion()}});
-async function renderSchedule(){try{const data=await api("/api/study-sessions");const list=$("#scheduleList");if(!data.items.length)return;list.innerHTML=data.items.map(item=>`<div class="schedule-item"><span class="schedule-day">${item.day.slice(0,3).toUpperCase()}</span><div><strong>${item.topic}</strong><p>Personal study session · ${item.duration_minutes} min</p></div><button class="schedule-status ${item.completed?"done-status":""}" data-session-complete="${item.id}" type="button">${item.completed?"Done":"Mark done"}</button><button class="schedule-delete" data-session-delete="${item.id}" type="button" aria-label="Delete study session">×</button></div>`).join("");$$("[data-session-complete]").forEach(button=>button.addEventListener("click",async()=>{try{await api(`/api/study-sessions/${button.dataset.sessionComplete}`,{method:"PATCH",body:JSON.stringify({completed:true})});renderSchedule();toast("Study session marked complete.")}catch(error){toast(error.message)}}));$$("[data-session-delete]").forEach(button=>button.addEventListener("click",async()=>{try{await api(`/api/study-sessions/${button.dataset.sessionDelete}`,{method:"DELETE"});renderSchedule();toast("Study session removed.")}catch(error){toast(error.message)}}));}catch(error){toast("Study planner couldn't load saved sessions.")}}
-$("#addStudyBtn").addEventListener("click",async()=>{const day=prompt("Which day would you like to study? (e.g. Thursday)");if(!day||!day.trim())return;const topic=prompt("What would you like to study?","Python Foundations");if(!topic||!topic.trim())return;const durationText=prompt("How many minutes?","20");if(durationText===null)return;const duration=Number(durationText);if(!Number.isInteger(duration)||duration<5||duration>480){toast("Enter a duration between 5 and 480 minutes.");return}try{await api("/api/study-sessions",{method:"POST",body:JSON.stringify({day:day.trim(),topic:topic.trim(),duration_minutes:duration})});await renderSchedule();toast("Study session saved to your planner.")}catch(error){toast(error.message)}});
-$("#todayDate").textContent=new Intl.DateTimeFormat(undefined,{weekday:"short",month:"short",day:"numeric"}).format(new Date());
-const savedName=localStorage.getItem("learnforge-name");if(savedName){$(".top-profile-name").textContent=savedName;$(".top-profile .avatar").textContent=initials(savedName);$(".profile .avatar").textContent=initials(savedName);$(".profile strong").textContent=savedName}
-api("/api/session").then(async data=>{const savedRole=data.role||"student";localStorage.setItem("learnforge-role",savedRole);$("#roleSwitch").textContent=savedRole==="faculty"?"Faculty workspace":"Student workspace";$$("[data-page=\"faculty-dashboard\"]").forEach(el=>el.hidden=savedRole!=="faculty");if(savedRole==="faculty")goTo("faculty-dashboard")}).catch(()=>{});
-loadDashboard();renderSchedule();
+
+function pickRandomCourse(){
+  if(!courses.length) return;
+  const rand = courses[Math.floor(Math.random() * courses.length)];
+  toast(`🎲 Selected "${rand.title}" for you!`);
+  openCourse(rand.id);
+}
+
+function togglePomodoro(){
+  const btn = $("#pomodoroBtn");
+  const display = $("#timerDisplay");
+  if(timerRunning){
+    clearInterval(timerInterval);
+    timerRunning = false;
+    btn.classList.remove("active");
+    display.textContent = `Paused (${formatTime(timerSeconds)})`;
+    toast("Focus timer paused.");
+  } else {
+    timerRunning = true;
+    btn.classList.add("active");
+    toast("⏱️ 25-minute focus session started. Happy learning!");
+    timerInterval = setInterval(() => {
+      if(timerSeconds > 0){
+        timerSeconds--;
+        display.textContent = formatTime(timerSeconds);
+      } else {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        btn.classList.remove("active");
+        timerSeconds = 25 * 60;
+        display.textContent = "Focus 25m";
+        toast("🎉 25-minute focus session complete! Take a well-deserved 5-minute break.");
+      }
+    }, 1000);
+  }
+}
+
+function formatTime(totalSec){
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function handleStreakCheckIn(){
+  let currentStreak = parseInt(localStorage.getItem("lf_streak") || "7", 10);
+  const lastCheckIn = localStorage.getItem("lf_streak_date");
+  const todayKey = new Date().toDateString();
+
+  if(lastCheckIn === todayKey){
+    toast("🔥 You've already checked in today! Streak safe.");
+    return;
+  }
+  currentStreak += 1;
+  localStorage.setItem("lf_streak", currentStreak);
+  localStorage.setItem("lf_streak_date", todayKey);
+  $("#streakCount").textContent = currentStreak;
+  if($("#heroStreakBadge")) $("#heroStreakBadge").textContent = `✦ ${currentStreak} day streak`;
+  $("#streakBtn").classList.add("checked-in");
+  toast(`🔥 Streak claimed! You're on a ${currentStreak}-day streak. Keep it going!`);
+}
+
+async function loadQuiz(){
+  try {
+    quizItems = await api("/api/quiz");
+    quizIndex = 0;
+    quizAnswers = {};
+    quizChecked = false;
+    $("#quizResult").classList.add("hidden");
+    $("#quizForm").classList.remove("hidden");
+    renderQuestion();
+  } catch(e) {
+    toast("Practice questions couldn't be loaded.");
+  }
+}
+
+function renderQuestion(){
+  const q = quizItems[quizIndex];
+  if(!q) return;
+  $("#quizStep").textContent = `QUESTION ${quizIndex + 1} OF ${quizItems.length}`;
+  $("#quizPercent").textContent = `${Math.round(quizIndex / quizItems.length * 100)}% complete`;
+  $("#quizTrack").style.width = `${quizIndex / quizItems.length * 100}%`;
+  $("#quizBack").disabled = quizIndex === 0;
+  $("#quizNext").textContent = quizChecked ? (quizIndex === quizItems.length - 1 ? "See results →" : "Next question →") : "Check answer →";
+  $("#quizContent").innerHTML = `
+    <h2 class="quiz-question">${q.question}</h2>
+    <div class="quiz-options">
+      ${q.options.map((option, i) => `
+        <label class="quiz-option ${quizAnswers[q.id] === i ? "selected" : ""}">
+          <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+          <span>${option}</span>
+          <input type="radio" name="quizAnswer" value="${i}" ${quizAnswers[q.id] === i ? "checked" : ""} style="margin-left:auto;accent-color:#7358e8">
+        </label>
+      `).join("")}
+    </div>
+    ${quizChecked ? `<div class="quiz-feedback ${quizAnswers[q.id] === q.answer ? "correct" : "incorrect"}">${quizAnswers[q.id] === q.answer ? "Correct! " : "Not quite. "}${q.explanation}</div>` : ""}
+  `;
+  $$(".quiz-option", $("#quizContent")).forEach((label, i) => label.addEventListener("click", () => {
+    if(quizChecked) return;
+    quizAnswers[q.id] = i;
+    renderQuestion();
+  }));
+}
+
+async function submitQuiz(){
+  try {
+    const answers = {};
+    quizItems.forEach(q => {
+      if(quizAnswers[q.id] !== undefined) answers[q.id] = quizAnswers[q.id];
+    });
+    const result = await api("/api/quiz/submit", {method: "POST", body: JSON.stringify({answers})});
+    $("#quizForm").classList.add("hidden");
+    $("#quizResult").classList.remove("hidden");
+    $("#quizResult").innerHTML = `
+      <div class="score">${result.percent}%</div>
+      <h2>${result.percent === 100 ? "Brilliant work!" : result.percent >= 60 ? "Nice progress!" : "Keep practicing!"}</h2>
+      <p>You got ${result.score} out of ${result.total} correct. Every attempt helps the ideas stick.</p>
+      <button class="primary-btn" id="tryAgainBtn">Try again →</button>
+    `;
+    $("#quizResult").querySelector("button").onclick = loadQuiz;
+    $("#quizTrack").style.width = "100%";
+    $("#quizPercent").textContent = "100% complete";
+  } catch(e) {
+    toast(e.message);
+  }
+}
+
+$$("[data-page]").forEach(el => el.addEventListener("click", () => goTo(el.dataset.page)));
+
+document.addEventListener("click", e => {
+  const bookmarkBtn = e.target.closest("[data-bookmark]");
+  if(bookmarkBtn){
+    e.stopPropagation();
+    toggleBookmark(bookmarkBtn.dataset.bookmark);
+    return;
+  }
+  const btn = e.target.closest("[data-course]");
+  if(btn) openCourse(btn.dataset.course);
+});
+
+$$(".topic-pill").forEach(pill => {
+  pill.addEventListener("click", () => {
+    const cat = pill.dataset.category;
+    $("#categoryFilter").value = cat;
+    renderCatalog();
+  });
+});
+
+$("#courseSearch").addEventListener("input", () => renderCatalog());
+$("#categoryFilter").addEventListener("change", renderCatalog);
+$("#levelFilter").addEventListener("change", renderCatalog);
+
+if($("#randomCourseBtn")) $("#randomCourseBtn").addEventListener("click", pickRandomCourse);
+if($("#heroSurpriseBtn")) $("#heroSurpriseBtn").addEventListener("click", pickRandomCourse);
+
+if($("#topRatedBtn")){
+  $("#topRatedBtn").addEventListener("click", () => {
+    topRatedOnly = !topRatedOnly;
+    $("#topRatedBtn").classList.toggle("active", topRatedOnly);
+    toast(topRatedOnly ? "Showing 4.9+ rated courses only." : "Showing all ratings.");
+    renderCatalog();
+  });
+}
+
+if($("#streakBtn")) $("#streakBtn").addEventListener("click", handleStreakCheckIn);
+if($("#pomodoroBtn")) $("#pomodoroBtn").addEventListener("click", togglePomodoro);
+
+$("#clearFilters").addEventListener("click", () => {
+  $("#courseSearch").value = "";
+  $("#categoryFilter").value = "All";
+  $("#levelFilter").value = "All";
+  topRatedOnly = false;
+  if($("#topRatedBtn")) $("#topRatedBtn").classList.remove("active");
+  renderCatalog();
+});
+
+$("#searchFocus").addEventListener("click", () => {
+  goTo("catalog");
+  setTimeout(() => $("#courseSearch").focus(), 100);
+});
+
+document.addEventListener("keydown", e => {
+  if(e.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)){
+    e.preventDefault();
+    $("#searchFocus").click();
+  }
+  if(e.key === "Escape") closeModal();
+});
+
+$("#continueBtn").addEventListener("click", () => openCourse(1));
+$("#modalClose").addEventListener("click", closeModal);
+$("#modalBackdrop").addEventListener("click", e => {
+  if(e.target === $("#modalBackdrop")) closeModal();
+});
+
+$("#notificationsBtn").addEventListener("click", () => toast("You're all caught up — keep learning!"));
+$("#profileBtn").addEventListener("click", () => toast("Profile settings are a demo feature."));
+$("#aboutLink").addEventListener("click", e => {
+  e.preventDefault();
+  $("#modalBody").innerHTML = '<h2 id="modalTitle">About LearnForge</h2><p>LearnForge is a learning platform prototype designed to make practical, self-paced education feel clear and motivating.</p><p>Explore diverse topics from Artificial Intelligence, Cybersecurity, Modern Web Dev to DevOps and UX Design.</p><button class="primary-btn" id="aboutClose">Sounds good</button>';
+  $("#modalBackdrop").classList.remove("hidden");
+  $("#aboutClose").onclick = closeModal;
+});
+
+$("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+
+$("#quizNext").addEventListener("click", () => {
+  const q = quizItems[quizIndex];
+  if(!quizChecked){
+    if(quizAnswers[q.id] === undefined){
+      toast("Choose an answer first.");
+      return;
+    }
+    quizChecked = true;
+    renderQuestion();
+    return;
+  }
+  if(quizIndex < quizItems.length - 1){
+    quizIndex++;
+    quizChecked = false;
+    renderQuestion();
+  } else submitQuiz();
+});
+
+$("#quizBack").addEventListener("click", () => {
+  if(quizIndex > 0){
+    quizIndex--;
+    quizChecked = false;
+    renderQuestion();
+  }
+});
+
+$("#addStudyBtn").addEventListener("click", () => {
+  const day = prompt("Which day would you like to study? (e.g. Thursday)");
+  if(!day || !day.trim()) return;
+  const topic = prompt("What would you like to study?", "Generative AI & Prompt Engineering");
+  if(!topic || !topic.trim()) return;
+  const item = document.createElement("div");
+  item.className = "schedule-item";
+  const dayBadge = document.createElement("span");
+  dayBadge.className = "schedule-day";
+  dayBadge.textContent = day.trim().slice(0, 3).toUpperCase();
+  const details = document.createElement("div");
+  const title = document.createElement("strong");
+  title.textContent = topic.trim();
+  const desc = document.createElement("p");
+  desc.textContent = "Personal study session · 20 min";
+  details.append(title, desc);
+  const status = document.createElement("span");
+  status.className = "schedule-status";
+  status.textContent = "Planned";
+  item.append(dayBadge, details, status);
+  $("#scheduleList").append(item);
+  toast("Study session added to your weekly rhythm.");
+});
+
+$("#todayDate").textContent = new Intl.DateTimeFormat(undefined, {weekday: "short", month: "short", day: "numeric"}).format(new Date());
+
+const storedStreak = localStorage.getItem("lf_streak") || "7";
+if($("#streakCount")) $("#streakCount").textContent = storedStreak;
+
+loadDashboard();
