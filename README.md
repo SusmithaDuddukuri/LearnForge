@@ -212,3 +212,8 @@ Describe keyboard access, readable text, and clear navigation expectations.
 
 Document layout expectations for desktop, tablet, and mobile screens.
 
+
+## Notification Behavior
+
+Describe when learning notifications should appear and how users review them.
+
