@@ -357,3 +357,8 @@ Describe the expected mobile learning experience and touch-friendly controls.
 
 Describe accessible labels, clear notification states, and keyboard-friendly interaction.
 
+
+## Learner Privacy
+
+Explain the importance of protecting learner information and avoiding secrets in source control.
+
