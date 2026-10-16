@@ -287,3 +287,8 @@ Describe how contributors should prepare, test, and document changes.
 
 Explain how course outcomes communicate the knowledge and skills learners should gain.
 
+
+## Lesson Learning Objectives
+
+Describe how lesson objectives guide learners through the material.
+
