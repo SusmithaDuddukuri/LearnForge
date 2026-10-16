@@ -142,3 +142,8 @@ Explain how learners find and select courses.
 
 Explain how learners open lessons and return to the course outline.
 
+
+## Learning Progress
+
+Describe how lesson completion contributes to learning progress.
+
