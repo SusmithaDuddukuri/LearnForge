@@ -347,3 +347,8 @@ Describe expectations for clear explanations, relevant examples, and useful prac
 
 Explain why navigation controls should behave consistently across the learning experience.
 
+
+## Mobile Learning
+
+Describe the expected mobile learning experience and touch-friendly controls.
+
