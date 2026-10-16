@@ -247,3 +247,8 @@ Describe how study tasks are created, completed, and removed.
 
 Document how learners can interpret their recorded course progress.
 
+
+## Quiz Workflow
+
+Explain the intended quiz attempt and result review workflow.
+
