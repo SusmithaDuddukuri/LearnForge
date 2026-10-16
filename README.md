@@ -262,3 +262,8 @@ Document which prototype data is stored and how local persistence works.
 
 Describe environment configuration and safe handling of secrets.
 
+
+## Error Handling
+
+Document useful error messages and recovery guidance for common failures.
+
