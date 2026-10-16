@@ -132,3 +132,8 @@ LearnForge provides a focused learning workflow with course outlines, lesson con
 
 Students can follow lesson content and track completion. Faculty tools are intended to remain separate from student-facing dashboards.
 
+
+## Course Discovery
+
+Explain how learners find and select courses.
+
