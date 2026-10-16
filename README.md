@@ -292,3 +292,8 @@ Explain how course outcomes communicate the knowledge and skills learners should
 
 Describe how lesson objectives guide learners through the material.
 
+
+## Practice Activities
+
+Explain how practice activities help learners apply lesson concepts.
+
