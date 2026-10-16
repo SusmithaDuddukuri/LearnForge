@@ -222,3 +222,8 @@ Describe when learning notifications should appear and how users review them.
 
 Document available profile and workspace preferences.
 
+
+## Faculty Course Review
+
+Describe how faculty review course activity in the prototype.
+
