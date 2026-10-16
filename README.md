@@ -282,3 +282,8 @@ List the areas maintainers should verify before a release.
 
 Describe how contributors should prepare, test, and document changes.
 
+
+## Course Learning Outcomes
+
+Explain how course outcomes communicate the knowledge and skills learners should gain.
+
