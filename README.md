@@ -187,3 +187,8 @@ Describe the checks maintainers should perform before merging changes.
 
 Document how learners should check required knowledge before starting a course.
 
+
+## Course Catalog
+
+Explain how course information should be organized for learners.
+
