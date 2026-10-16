@@ -257,3 +257,8 @@ Explain the intended quiz attempt and result review workflow.
 
 Document which prototype data is stored and how local persistence works.
 
+
+## Application Configuration
+
+Describe environment configuration and safe handling of secrets.
+
