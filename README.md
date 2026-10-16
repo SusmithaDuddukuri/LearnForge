@@ -242,3 +242,8 @@ Explain how study sessions support learner planning and activity tracking.
 
 Describe how study tasks are created, completed, and removed.
 
+
+## Progress Reporting
+
+Document how learners can interpret their recorded course progress.
+
