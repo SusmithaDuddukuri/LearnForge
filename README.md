@@ -237,3 +237,8 @@ Document the distinction between student and faculty workspaces and the limits o
 
 Explain how study sessions support learner planning and activity tracking.
 
+
+## Study Task Management
+
+Describe how study tasks are created, completed, and removed.
+
