@@ -227,3 +227,8 @@ Document available profile and workspace preferences.
 
 Describe how faculty review course activity in the prototype.
 
+
+## Role Access Boundaries
+
+Document the distinction between student and faculty workspaces and the limits of prototype authentication.
+
