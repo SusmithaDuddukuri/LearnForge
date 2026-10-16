@@ -147,3 +147,8 @@ Explain how learners open lessons and return to the course outline.
 
 Describe how lesson completion contributes to learning progress.
 
+
+## Student Workspace
+
+Describe the student-facing learning workspace and its main tasks.
+
