@@ -162,3 +162,8 @@ Describe the intended faculty workflow and dashboard responsibilities.
 
 Explain how learning activity notifications help users follow updates.
 
+
+## Profile Preferences
+
+Describe profile settings and workspace preferences.
+
