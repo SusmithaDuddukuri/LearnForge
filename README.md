@@ -297,3 +297,8 @@ Describe how lesson objectives guide learners through the material.
 
 Explain how practice activities help learners apply lesson concepts.
 
+
+## Course Bookmarks
+
+Describe how bookmarks can help learners return to useful course material.
+
