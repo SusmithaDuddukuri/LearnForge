@@ -137,3 +137,8 @@ Students can follow lesson content and track completion. Faculty tools are inten
 
 Explain how learners find and select courses.
 
+
+## Lesson Navigation
+
+Explain how learners open lessons and return to the course outline.
+
