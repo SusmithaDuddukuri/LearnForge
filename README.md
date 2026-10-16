@@ -157,3 +157,8 @@ Describe the student-facing learning workspace and its main tasks.
 
 Describe the intended faculty workflow and dashboard responsibilities.
 
+
+## Notifications
+
+Explain how learning activity notifications help users follow updates.
+
