@@ -217,3 +217,8 @@ Document layout expectations for desktop, tablet, and mobile screens.
 
 Describe when learning notifications should appear and how users review them.
 
+
+## Account Preferences
+
+Document available profile and workspace preferences.
+
