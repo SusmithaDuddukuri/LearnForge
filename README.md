@@ -352,3 +352,8 @@ Explain why navigation controls should behave consistently across the learning e
 
 Describe the expected mobile learning experience and touch-friendly controls.
 
+
+## Notification Accessibility
+
+Describe accessible labels, clear notification states, and keyboard-friendly interaction.
+
