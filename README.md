@@ -362,3 +362,8 @@ Describe accessible labels, clear notification states, and keyboard-friendly int
 
 Explain the importance of protecting learner information and avoiding secrets in source control.
 
+
+## Local Database Handling
+
+Describe how local database files should be managed during development and testing.
+
