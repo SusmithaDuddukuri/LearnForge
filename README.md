@@ -197,3 +197,8 @@ Explain how course information should be organized for learners.
 
 Document the expected structure of lesson explanations and practice material.
 
+
+## Lesson Completion
+
+Describe the intended workflow for marking lessons complete.
+
