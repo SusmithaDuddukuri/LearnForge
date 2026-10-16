@@ -122,7 +122,7 @@ def dashboard():
     sessions = list_sessions()
     attempts = list_quiz_attempts()
     return jsonify({
-        "learner": {"name": "Alex Morgan", "streak": 7, "weekly_goal": 5, "weekly_done": 3},
+        "learner": {"name": "Avinash Rachapudi", "streak": 7, "weekly_goal": 5, "weekly_done": 3},
         "stats": {"enrolled": len(enrolled), "completed": completed, "learning_hours": 24, "certificates": completed},
         "courses": enrolled,
         "next_lesson": {"course": "Python Foundations", "lesson": "Functions in practice", "course_id": 1},
