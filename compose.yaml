@@ -1,0 +1,7 @@
+services:
+  learnforge:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_DEBUG=0
