@@ -377,3 +377,8 @@ Provide a starting point for diagnosing dependency, startup, and navigation prob
 
 Describe how reviewers can check correctness, readability, security, and maintainability.
 
+
+## Quality Assurance
+
+Explain the value of syntax checks, automated tests, and manual workflow verification.
+
