@@ -317,3 +317,8 @@ Recommend readable lesson sections, clear headings, and manageable content block
 
 Help learners select courses based on goals, prerequisites, and current knowledge.
 
+
+## Learning Reminders
+
+Explain how reminders can support regular study without distracting learners.
+
