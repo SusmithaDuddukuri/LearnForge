@@ -272,3 +272,8 @@ Document useful error messages and recovery guidance for common failures.
 
 Describe maintainable code, focused changes, and review expectations.
 
+
+## Release Readiness
+
+List the areas maintainers should verify before a release.
+
