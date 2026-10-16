@@ -277,3 +277,8 @@ Describe maintainable code, focused changes, and review expectations.
 
 List the areas maintainers should verify before a release.
 
+
+## Contribution Guidelines
+
+Describe how contributors should prepare, test, and document changes.
+
