@@ -207,3 +207,8 @@ Describe the intended workflow for marking lessons complete.
 
 Describe keyboard access, readable text, and clear navigation expectations.
 
+
+## Responsive Layout
+
+Document layout expectations for desktop, tablet, and mobile screens.
+
