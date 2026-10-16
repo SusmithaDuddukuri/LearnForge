@@ -327,3 +327,8 @@ Explain how reminders can support regular study without distracting learners.
 
 Describe the information faculty should review when monitoring course activity.
 
+
+## Student Support
+
+Explain how learners should seek help when course material or navigation is unclear.
+
