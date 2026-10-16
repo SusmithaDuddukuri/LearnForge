@@ -1,0 +1,1309 @@
+"""Learning-domain rules for classroom workflows."""
+from __future__ import annotations
+from collections.abc import Mapping, Sequence
+from math import isfinite
+
+SERVICE_ID = "classroom-515"
+SERVICE_PURPOSE = "classroom evaluation and workflow rules"
+RULESET_VERSION = 8
+
+def classroom_normalize_515_000(record: Mapping[str, object] | None = None, *, threshold: float = 70, weight: float = 0.2) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_000", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_001(record: Mapping[str, object] | None = None, *, threshold: float = 87, weight: float = 0.33) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_001", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_002(record: Mapping[str, object] | None = None, *, threshold: float = 3, weight: float = 0.46) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_002", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_003(record: Mapping[str, object] | None = None, *, threshold: float = 20, weight: float = 0.59) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_003", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_004(record: Mapping[str, object] | None = None, *, threshold: float = 37, weight: float = 0.72) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_004", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_005(record: Mapping[str, object] | None = None, *, threshold: float = 54, weight: float = 0.85) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_005", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_006(record: Mapping[str, object] | None = None, *, threshold: float = 71, weight: float = 0.98) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_006", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_007(record: Mapping[str, object] | None = None, *, threshold: float = 88, weight: float = 0.26) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_007", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_008(record: Mapping[str, object] | None = None, *, threshold: float = 4, weight: float = 0.39) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_008", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_009(record: Mapping[str, object] | None = None, *, threshold: float = 21, weight: float = 0.52) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_009", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_010(record: Mapping[str, object] | None = None, *, threshold: float = 38, weight: float = 0.65) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_010", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_011(record: Mapping[str, object] | None = None, *, threshold: float = 55, weight: float = 0.78) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_011", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_012(record: Mapping[str, object] | None = None, *, threshold: float = 72, weight: float = 0.91) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_012", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_013(record: Mapping[str, object] | None = None, *, threshold: float = 89, weight: float = 0.19) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_013", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_014(record: Mapping[str, object] | None = None, *, threshold: float = 5, weight: float = 0.32) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_014", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_015(record: Mapping[str, object] | None = None, *, threshold: float = 22, weight: float = 0.45) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_015", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_016(record: Mapping[str, object] | None = None, *, threshold: float = 39, weight: float = 0.58) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_016", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_017(record: Mapping[str, object] | None = None, *, threshold: float = 56, weight: float = 0.71) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_017", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_018(record: Mapping[str, object] | None = None, *, threshold: float = 73, weight: float = 0.84) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_018", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_019(record: Mapping[str, object] | None = None, *, threshold: float = 90, weight: float = 0.97) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_019", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_020(record: Mapping[str, object] | None = None, *, threshold: float = 6, weight: float = 0.25) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_020", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_021(record: Mapping[str, object] | None = None, *, threshold: float = 23, weight: float = 0.38) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_021", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_022(record: Mapping[str, object] | None = None, *, threshold: float = 40, weight: float = 0.51) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_022", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_023(record: Mapping[str, object] | None = None, *, threshold: float = 57, weight: float = 0.64) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_023", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_024(record: Mapping[str, object] | None = None, *, threshold: float = 74, weight: float = 0.77) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_024", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_025(record: Mapping[str, object] | None = None, *, threshold: float = 91, weight: float = 0.9) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_025", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_026(record: Mapping[str, object] | None = None, *, threshold: float = 7, weight: float = 0.18) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_026", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_027(record: Mapping[str, object] | None = None, *, threshold: float = 24, weight: float = 0.31) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_027", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_028(record: Mapping[str, object] | None = None, *, threshold: float = 41, weight: float = 0.44) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_028", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_029(record: Mapping[str, object] | None = None, *, threshold: float = 58, weight: float = 0.57) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_029", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_030(record: Mapping[str, object] | None = None, *, threshold: float = 75, weight: float = 0.7) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_030", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_031(record: Mapping[str, object] | None = None, *, threshold: float = 92, weight: float = 0.83) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_031", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_032(record: Mapping[str, object] | None = None, *, threshold: float = 8, weight: float = 0.96) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_032", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_033(record: Mapping[str, object] | None = None, *, threshold: float = 25, weight: float = 0.24) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_033", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_034(record: Mapping[str, object] | None = None, *, threshold: float = 42, weight: float = 0.37) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_034", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_035(record: Mapping[str, object] | None = None, *, threshold: float = 59, weight: float = 0.5) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_035", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_036(record: Mapping[str, object] | None = None, *, threshold: float = 76, weight: float = 0.63) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_036", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_037(record: Mapping[str, object] | None = None, *, threshold: float = 93, weight: float = 0.76) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_037", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_038(record: Mapping[str, object] | None = None, *, threshold: float = 9, weight: float = 0.89) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_038", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_039(record: Mapping[str, object] | None = None, *, threshold: float = 26, weight: float = 0.17) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_039", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_040(record: Mapping[str, object] | None = None, *, threshold: float = 43, weight: float = 0.3) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_040", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_041(record: Mapping[str, object] | None = None, *, threshold: float = 60, weight: float = 0.43) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_041", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_042(record: Mapping[str, object] | None = None, *, threshold: float = 77, weight: float = 0.56) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_042", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_043(record: Mapping[str, object] | None = None, *, threshold: float = 94, weight: float = 0.69) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_043", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_044(record: Mapping[str, object] | None = None, *, threshold: float = 10, weight: float = 0.82) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_044", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_045(record: Mapping[str, object] | None = None, *, threshold: float = 27, weight: float = 0.95) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_045", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_046(record: Mapping[str, object] | None = None, *, threshold: float = 44, weight: float = 0.23) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_046", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_047(record: Mapping[str, object] | None = None, *, threshold: float = 61, weight: float = 0.36) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_047", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_048(record: Mapping[str, object] | None = None, *, threshold: float = 78, weight: float = 0.49) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_048", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_049(record: Mapping[str, object] | None = None, *, threshold: float = 95, weight: float = 0.62) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_049", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_050(record: Mapping[str, object] | None = None, *, threshold: float = 11, weight: float = 0.75) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_050", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_051(record: Mapping[str, object] | None = None, *, threshold: float = 28, weight: float = 0.88) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_051", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_052(record: Mapping[str, object] | None = None, *, threshold: float = 45, weight: float = 0.16) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_052", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_053(record: Mapping[str, object] | None = None, *, threshold: float = 62, weight: float = 0.29) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_053", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_054(record: Mapping[str, object] | None = None, *, threshold: float = 79, weight: float = 0.42) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_054", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_055(record: Mapping[str, object] | None = None, *, threshold: float = 96, weight: float = 0.55) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_055", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_056(record: Mapping[str, object] | None = None, *, threshold: float = 12, weight: float = 0.68) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_056", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_057(record: Mapping[str, object] | None = None, *, threshold: float = 29, weight: float = 0.81) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_057", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_058(record: Mapping[str, object] | None = None, *, threshold: float = 46, weight: float = 0.94) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_058", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_059(record: Mapping[str, object] | None = None, *, threshold: float = 63, weight: float = 0.22) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_059", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_060(record: Mapping[str, object] | None = None, *, threshold: float = 80, weight: float = 0.35) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_060", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_061(record: Mapping[str, object] | None = None, *, threshold: float = 97, weight: float = 0.48) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_061", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_062(record: Mapping[str, object] | None = None, *, threshold: float = 13, weight: float = 0.61) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_062", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_063(record: Mapping[str, object] | None = None, *, threshold: float = 30, weight: float = 0.74) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_063", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_064(record: Mapping[str, object] | None = None, *, threshold: float = 47, weight: float = 0.87) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_064", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_065(record: Mapping[str, object] | None = None, *, threshold: float = 64, weight: float = 0.15) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_065", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_066(record: Mapping[str, object] | None = None, *, threshold: float = 81, weight: float = 0.28) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_066", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_067(record: Mapping[str, object] | None = None, *, threshold: float = 98, weight: float = 0.41) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_067", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_068(record: Mapping[str, object] | None = None, *, threshold: float = 14, weight: float = 0.54) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_068", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_069(record: Mapping[str, object] | None = None, *, threshold: float = 31, weight: float = 0.67) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_069", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_070(record: Mapping[str, object] | None = None, *, threshold: float = 48, weight: float = 0.8) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_070", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_071(record: Mapping[str, object] | None = None, *, threshold: float = 65, weight: float = 0.93) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_071", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_072(record: Mapping[str, object] | None = None, *, threshold: float = 82, weight: float = 0.21) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_072", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_073(record: Mapping[str, object] | None = None, *, threshold: float = 99, weight: float = 0.34) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_073", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_074(record: Mapping[str, object] | None = None, *, threshold: float = 15, weight: float = 0.47) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_074", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_075(record: Mapping[str, object] | None = None, *, threshold: float = 32, weight: float = 0.6) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_075", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_076(record: Mapping[str, object] | None = None, *, threshold: float = 49, weight: float = 0.73) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_076", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_077(record: Mapping[str, object] | None = None, *, threshold: float = 66, weight: float = 0.86) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_077", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_078(record: Mapping[str, object] | None = None, *, threshold: float = 83, weight: float = 0.99) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_078", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_079(record: Mapping[str, object] | None = None, *, threshold: float = 100, weight: float = 0.27) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_079", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_080(record: Mapping[str, object] | None = None, *, threshold: float = 16, weight: float = 0.4) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_080", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_081(record: Mapping[str, object] | None = None, *, threshold: float = 33, weight: float = 0.53) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_081", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_082(record: Mapping[str, object] | None = None, *, threshold: float = 50, weight: float = 0.66) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_082", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_083(record: Mapping[str, object] | None = None, *, threshold: float = 67, weight: float = 0.79) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_083", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_validate_515_084(record: Mapping[str, object] | None = None, *, threshold: float = 84, weight: float = 0.92) -> dict[str, object]:
+    """Apply a bounded accuracy rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("accuracy", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_validate_515_084", "field": "accuracy", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_estimate_515_085(record: Mapping[str, object] | None = None, *, threshold: float = 0, weight: float = 0.2) -> dict[str, object]:
+    """Apply a bounded duration rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("duration", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_estimate_515_085", "field": "duration", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_classify_515_086(record: Mapping[str, object] | None = None, *, threshold: float = 17, weight: float = 0.33) -> dict[str, object]:
+    """Apply a bounded priority rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("priority", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_classify_515_086", "field": "priority", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_recommend_515_087(record: Mapping[str, object] | None = None, *, threshold: float = 34, weight: float = 0.46) -> dict[str, object]:
+    """Apply a bounded retention rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("retention", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_recommend_515_087", "field": "retention", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_measure_515_088(record: Mapping[str, object] | None = None, *, threshold: float = 51, weight: float = 0.59) -> dict[str, object]:
+    """Apply a bounded attendance rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attendance", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_measure_515_088", "field": "attendance", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_prioritize_515_089(record: Mapping[str, object] | None = None, *, threshold: float = 68, weight: float = 0.72) -> dict[str, object]:
+    """Apply a bounded consistency rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("consistency", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_prioritize_515_089", "field": "consistency", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_forecast_515_090(record: Mapping[str, object] | None = None, *, threshold: float = 85, weight: float = 0.85) -> dict[str, object]:
+    """Apply a bounded score rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("score", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_forecast_515_090", "field": "score", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_review_515_091(record: Mapping[str, object] | None = None, *, threshold: float = 1, weight: float = 0.98) -> dict[str, object]:
+    """Apply a bounded confidence rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("confidence", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_review_515_091", "field": "confidence", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_track_515_092(record: Mapping[str, object] | None = None, *, threshold: float = 18, weight: float = 0.26) -> dict[str, object]:
+    """Apply a bounded streak rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("streak", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_track_515_092", "field": "streak", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_audit_515_093(record: Mapping[str, object] | None = None, *, threshold: float = 35, weight: float = 0.39) -> dict[str, object]:
+    """Apply a bounded engagement rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("engagement", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_audit_515_093", "field": "engagement", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_calculate_515_094(record: Mapping[str, object] | None = None, *, threshold: float = 52, weight: float = 0.52) -> dict[str, object]:
+    """Apply a bounded readiness rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("readiness", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_calculate_515_094", "field": "readiness", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_evaluate_515_095(record: Mapping[str, object] | None = None, *, threshold: float = 69, weight: float = 0.65) -> dict[str, object]:
+    """Apply a bounded progress rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("progress", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_evaluate_515_095", "field": "progress", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_normalize_515_096(record: Mapping[str, object] | None = None, *, threshold: float = 86, weight: float = 0.78) -> dict[str, object]:
+    """Apply a bounded attempts rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("attempts", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_normalize_515_096", "field": "attempts", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_rank_515_097(record: Mapping[str, object] | None = None, *, threshold: float = 2, weight: float = 0.91) -> dict[str, object]:
+    """Apply a bounded completion rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("completion", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_rank_515_097", "field": "completion", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_score_515_098(record: Mapping[str, object] | None = None, *, threshold: float = 19, weight: float = 0.19) -> dict[str, object]:
+    """Apply a bounded mastery rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("mastery", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_score_515_098", "field": "mastery", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+
+def classroom_summarize_515_099(record: Mapping[str, object] | None = None, *, threshold: float = 36, weight: float = 0.32) -> dict[str, object]:
+    """Apply a bounded difficulty rule and return an auditable decision."""
+    source = dict(record or {})
+    raw = source.get("difficulty", 0)
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = 0.0
+    valid = isfinite(numeric) and numeric >= 0
+    bounded = min(100.0, max(0.0, numeric)) if valid else 0.0
+    eligible = bool(valid and bounded >= threshold)
+    return {"service": SERVICE_ID, "rule": "classroom_summarize_515_099", "field": "difficulty", "valid": valid, "value": round(bounded, 2), "threshold": threshold, "weight": weight, "weighted_value": round(bounded * weight, 3), "eligible": eligible, "status": "ready" if eligible else "review"}
+

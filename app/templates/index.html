@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LearnForge learning dashboard: discover courses, track progress, and practice skills.">
+  <title>LearnForge — Learning that moves you forward</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#" data-page="dashboard" aria-label="LearnForge home"><span class="brand-mark">L</span><span>learnforge<span class="brand-dot">.</span></span></a>
+    <div class="workspace-label">LEARNING SPACE</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-page="dashboard"><span>◫</span> Overview</button>
+      <button class="nav-item" data-page="catalog"><span>▦</span> Explore courses</button>
+      <button class="nav-item" data-page="my-learning"><span>▤</span> My learning</button>
+      <button class="nav-item" data-page="practice"><span>✳</span> Quick practice <span class="nav-pill">New</span></button>
+    </nav>
+    <div class="workspace-label second-label">YOUR SPACE</div>
+    <nav class="main-nav" aria-label="Personal navigation">
+      <button class="nav-item" data-page="achievements"><span>♧</span> Achievements</button>
+      <button class="nav-item" data-page="schedule"><span>▦</span> Study planner</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="help-card"><div class="help-icon">✦</div><strong>Keep your momentum</strong><p>Small steps add up. Your next lesson is waiting.</p><button data-page="my-learning" class="text-action">Continue learning →</button></div>
+      <div class="profile"><div class="avatar">AM</div><div><strong>Alex Morgan</strong><small>Free learner</small></div><button class="dots" aria-label="Profile options" id="profileBtn">•••</button></div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <button class="mobile-menu" id="menuBtn" aria-label="Toggle navigation">☰</button>
+      <div class="breadcrumbs"><span>Learning space</span><span class="crumb-slash">/</span><strong id="crumbCurrent">Overview</strong></div>
+      <div class="top-actions"><button class="role-switch" id="roleSwitch" title="Open your authorized workspace">Student view</button><button class="icon-button" id="searchFocus" aria-label="Focus course search" title="Search courses">⌕</button><button class="icon-button notification" id="notificationsBtn" aria-label="Notifications" title="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i></i></button><button class="top-profile" id="topProfileBtn" aria-label="Open profile"><span class="avatar small"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-4 3-6 7-6s6.5 2 7 6"/></svg></span><span class="top-profile-name">Alex Morgan</span><span class="profile-chevron"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></span></button></div>
+    </header>
+
+    <section class="page active-page" id="page-dashboard">
+      <div class="welcome-row"><div><div class="eyebrow"><span class="spark">✦</span> MONDAY MOTIVATION</div><h1>Make today <em>count.</em></h1><p class="subheading">You're building something great. Let's keep your learning streak alive.</p></div><div class="welcome-date"><span class="date-icon">☼</span><div><strong id="todayDate">Your learning day</strong><small>One lesson at a time</small></div></div></div>
+      <div class="hero-card"><div class="hero-copy"><div class="hero-kicker"><span class="live-dot"></span> PICK UP WHERE YOU LEFT OFF</div><h2>Progress happens<br>one lesson at a time.</h2><p>Jump back into your current course and keep the momentum going.</p><button class="primary-btn" id="continueBtn">Continue learning <span>→</span></button><div class="hero-meta"><span>◷ 28 min lesson</span><span>✦ Python Foundations</span></div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-window"><div class="window-dots"><i></i><i></i><i></i></div><div class="code-line short"></div><div class="code-line long"></div><div class="code-line mid"></div><div class="code-indent"><div class="code-line short"></div><div class="code-line mid"></div></div><div class="code-line long"></div><div class="code-line short"></div><div class="art-check">✓</div></div><div class="float-chip chip-top">✦ 7 day streak</div><div class="float-chip chip-bottom"><span class="mini-check">✓</span> Lesson complete!</div></div></div>
+      <div class="section-heading"><div><h2>Your learning at a glance</h2><p>Every bit of progress counts.</p></div><button class="subtle-btn" data-page="my-learning">View all activity <span>→</span></button></div>
+      <div class="stats-grid"><article class="stat-card"><div class="stat-top"><span class="stat-icon purple">▤</span><span class="stat-trend">↗ 2 this month</span></div><div class="stat-value" id="statEnrolled">3</div><div class="stat-label">Courses in progress</div><div class="tiny-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article><article class="stat-card"><div class="stat-top"><span class="stat-icon green">✓</span><span class="stat-note">Keep it up</span></div><div class="stat-value" id="statCompleted">0</div><div class="stat-label">Courses completed</div><div class="stat-progress"><span style="width:12%"></span></div><small class="stat-foot">Your next milestone is close</small></article><article class="stat-card"><div class="stat-top"><span class="stat-icon orange">◷</span><span class="stat-trend">↗ 18% this week</span></div><div class="stat-value"><span id="statHours">24</span><small> hrs</small></div><div class="stat-label">Time invested</div><div class="week-bars"><i style="height:35%"></i><i style="height:56%"></i><i style="height:42%"></i><i style="height:82%"></i><i style="height:65%"></i><i style="height:100%"></i><i style="height:48%"></i></div><div class="week-days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div></article></div>
+      <div class="content-grid"><section class="panel course-panel"><div class="panel-heading"><div><h2>Pick up your progress</h2><p>You're closer than you think.</p></div><button class="round-arrow" data-page="my-learning" aria-label="View all courses">↗</button></div><div id="progressCourses" class="progress-courses"><div class="loading">Loading your courses…</div></div></section><section class="panel goal-panel"><div class="panel-heading"><div><h2>Your weekly goal</h2><p>Consistency beats intensity.</p></div><span class="goal-symbol">✳</span></div><div class="goal-number"><strong>3</strong><span>/ 5 days</span></div><div class="goal-track"><span style="width:60%"></span></div><div class="goal-days"><span class="done">M</span><span class="done">T</span><span class="done">W</span><span> T </span><span>F</span><span>S</span><span>S</span></div><div class="goal-tip"><span>✦</span><div><strong>You're on a roll!</strong><p>Two more study days to hit your goal this week.</p></div></div><button class="outline-btn full" data-page="schedule">Open study planner <span>→</span></button></section></div>
+      <div class="section-heading explore-heading"><div><h2>Made for your next big thing</h2><p>Explore a course that sparks your curiosity.</p></div><button class="subtle-btn" data-page="catalog">Browse catalog <span>→</span></button></div><div class="course-grid" id="recommendedCourses"></div>
+      <footer class="footer"><span>© 2026 LearnForge</span><span>Curiosity looks good on you.</span><a href="#" id="aboutLink">About LearnForge</a></footer>
+    </section>
+
+    <section class="page" id="page-faculty-dashboard">
+      <div class="page-intro"><div class="eyebrow">FACULTY WORKSPACE</div><h1>Your classes, <em>at a glance.</em></h1><p class="subheading">A practical overview for instructors to keep courses moving.</p></div>
+      <div class="stats-grid faculty-stats"><article class="stat-card"><div class="stat-top"><span class="stat-icon purple">▤</span><span class="stat-note">Across all courses</span></div><div class="stat-value" id="facultyCourseCount">4</div><div class="stat-label">Published courses</div></article><article class="stat-card"><div class="stat-top"><span class="stat-icon green">✓</span><span class="stat-note">Current learner activity</span></div><div class="stat-value" id="facultyActiveCount">3</div><div class="stat-label">Learners in progress</div></article><article class="stat-card"><div class="stat-top"><span class="stat-icon orange">◷</span><span class="stat-note">From recent practice</span></div><div class="stat-value" id="facultyQuizCount">0</div><div class="stat-label">Quiz attempts</div></article></div>
+      <div class="panel faculty-panel"><div class="panel-heading"><div><h2>Course activity</h2><p>Review progress and open any course to inspect its lesson plan.</p></div><button class="outline-btn" id="facultyRefreshBtn">Refresh activity</button></div><div id="facultyCourseTable" class="faculty-course-list"></div></div>
+    </section>
+    <section class="page" id="page-catalog">
+      <div class="page-intro"><div class="eyebrow">THE COURSE CATALOG</div><h1>Find your <em>next skill.</em></h1><p class="subheading">Practical learning paths for curious minds and ambitious goals.</p></div>
+      <div class="catalog-tools"><label class="search-box"><span>⌕</span><input id="courseSearch" placeholder="Search courses, skills, or topics…" autocomplete="off"><kbd>/</kbd></label><select id="categoryFilter" aria-label="Filter by category"><option>All</option><option>Development</option><option>Data</option><option>Design</option><option>Technology</option></select><select id="levelFilter" aria-label="Filter by level"><option>All</option><option>Beginner</option><option>Intermediate</option></select></div>
+      <div class="catalog-summary"><span id="catalogCount">4 courses</span><span>Curated for real-world skills</span></div><div class="course-grid catalog-grid" id="catalogCourses"></div>
+      <div class="empty-state hidden" id="emptyCourses"><div>⌕</div><h3>No courses found</h3><p>Try a different search or clear your filters.</p><button class="outline-btn" id="clearFilters">Clear filters</button></div>
+    </section>
+
+    <section class="page" id="page-my-learning"><div class="page-intro"><div class="eyebrow">YOUR PERSONAL LEARNING PATH</div><h1>Look how far <em>you've come.</em></h1><p class="subheading">Your courses, your pace, your progress.</p></div><div class="learning-summary" id="learningSummary"></div><h2 class="block-title">Your courses</h2><div class="course-grid catalog-grid" id="myCourses"></div></section>
+
+    <section class="page" id="page-practice"><div class="page-intro"><div class="eyebrow">A LITTLE PRACTICE GOES A LONG WAY</div><h1>Test your <em>knowledge.</em></h1><p class="subheading">Three quick questions. A tiny win for your day.</p></div><div class="quiz-panel panel"><div class="quiz-progress-row"><span id="quizStep">QUESTION 1 OF 3</span><span id="quizPercent">0% complete</span></div><div class="quiz-track"><span id="quizTrack"></span></div><form id="quizForm"><div id="quizContent"></div><div class="quiz-actions"><button type="button" class="outline-btn" id="quizBack" disabled>← Back</button><button type="button" class="primary-btn" id="quizNext">Check answer <span>→</span></button></div></form><div id="quizResult" class="quiz-result hidden"></div></div></section>
+
+    <section class="page" id="page-achievements"><div class="page-intro"><div class="eyebrow">CELEBRATE THE SMALL WINS</div><h1>Every step <em>counts.</em></h1><p class="subheading">Progress isn't always a finish line. Sometimes it's simply showing up.</p></div><div class="achievement-grid"><article class="achievement-card earned"><div class="achievement-art purple-art">✦</div><div><span class="earned-label">UNLOCKED</span><h3>Week one warrior</h3><p>Show up for seven days of learning.</p></div><span class="achievement-check">✓</span></article><article class="achievement-card"><div class="achievement-art green-art">✓</div><div><span class="locked-label">UP NEXT</span><h3>First course complete</h3><p>Finish your first learning path.</p><div class="mini-track"><span style="width:72%"></span></div></div><span class="lock">◇</span></article><article class="achievement-card"><div class="achievement-art orange-art">◷</div><div><span class="locked-label">IN PROGRESS</span><h3>Deep work</h3><p>Spend 30 hours learning something new.</p><div class="mini-track"><span style="width:80%"></span></div></div><span class="lock">◇</span></article><article class="achievement-card"><div class="achievement-art blue-art">✳</div><div><span class="locked-label">UP NEXT</span><h3>Curious mind</h3><p>Explore courses in three different categories.</p><div class="mini-track"><span style="width:34%"></span></div></div><span class="lock">◇</span></article></div></section>
+
+    <section class="page" id="page-schedule"><div class="page-intro"><div class="eyebrow">A PLAN THAT FITS YOUR LIFE</div><h1>Make room for <em>growth.</em></h1><p class="subheading">Choose a small, realistic study block and protect it.</p></div><div class="planner-layout"><div class="panel planner-panel"><div class="panel-heading"><div><h2>Your weekly rhythm</h2><p>Three study sessions are already on your calendar.</p></div><span class="goal-symbol">▦</span></div><div class="schedule-list" id="scheduleList"><div class="schedule-item"><span class="schedule-day today">MON</span><div><strong>Python Foundations</strong><p>Functions in practice · 28 min</p></div><span class="schedule-status done-status">Done</span></div><div class="schedule-item"><span class="schedule-day">WED</span><div><strong>Data Analytics Essentials</strong><p>Cleaning a dataset · 36 min</p></div><span class="schedule-status">Planned</span></div><div class="schedule-item"><span class="schedule-day">FRI</span><div><strong>Python Foundations</strong><p>Conditions and loops · 31 min</p></div><span class="schedule-status">Planned</span></div></div><button class="primary-btn" id="addStudyBtn">+ Add a study session</button></div><div class="panel planner-side"><div class="goal-symbol">✳</div><h2>Make it a ritual</h2><p>Pick a time you can protect, keep the session small, and celebrate when you show up.</p><div class="ritual-tip"><strong>Try this:</strong><p>20 minutes after breakfast, three days a week.</p></div></div></div></section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+</div>
+<div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><button class="modal-close" id="modalClose" aria-label="Close dialog">×</button><div id="modalBody"></div></div></div>
+<script src="/static/app.js" defer></script>
+</body>
+</html>
