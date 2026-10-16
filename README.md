@@ -167,3 +167,8 @@ Explain how learning activity notifications help users follow updates.
 
 Describe profile settings and workspace preferences.
 
+
+## Study Planner
+
+Explain how learners organize and track study tasks.
+
