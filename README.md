@@ -312,3 +312,8 @@ Provide guidance for building a consistent study routine around available learni
 
 Recommend readable lesson sections, clear headings, and manageable content blocks.
 
+
+## Course Selection Guidance
+
+Help learners select courses based on goals, prerequisites, and current knowledge.
+
