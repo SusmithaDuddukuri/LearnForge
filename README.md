@@ -367,3 +367,8 @@ Explain the importance of protecting learner information and avoiding secrets in
 
 Describe how local database files should be managed during development and testing.
 
+
+## Troubleshooting
+
+Provide a starting point for diagnosing dependency, startup, and navigation problems.
+
