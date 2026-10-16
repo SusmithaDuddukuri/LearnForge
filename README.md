@@ -307,3 +307,8 @@ Describe how bookmarks can help learners return to useful course material.
 
 Provide guidance for building a consistent study routine around available learning time.
 
+
+## Lesson Reading Guidance
+
+Recommend readable lesson sections, clear headings, and manageable content blocks.
+
