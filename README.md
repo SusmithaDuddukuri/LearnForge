@@ -192,3 +192,8 @@ Document how learners should check required knowledge before starting a course.
 
 Explain how course information should be organized for learners.
 
+
+## Lesson Content
+
+Document the expected structure of lesson explanations and practice material.
+
