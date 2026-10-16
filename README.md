@@ -322,3 +322,8 @@ Help learners select courses based on goals, prerequisites, and current knowledg
 
 Explain how reminders can support regular study without distracting learners.
 
+
+## Faculty Review Guidance
+
+Describe the information faculty should review when monitoring course activity.
+
