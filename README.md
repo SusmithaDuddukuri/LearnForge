@@ -152,3 +152,8 @@ Describe how lesson completion contributes to learning progress.
 
 Describe the student-facing learning workspace and its main tasks.
 
+
+## Faculty Workspace
+
+Describe the intended faculty workflow and dashboard responsibilities.
+
